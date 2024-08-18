@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Auxiliar Administrativo 2.1</title>
+    <!-- Importar Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="center-align">Test Auxiliar Administrativo 2.1</h2>
+
+        <!-- Sección de selección de examen -->
+        <div id="seleccionExamen" class="row">
+            <form id="tipoExamenForm" class="col s12">
+                <h4>Selecciona el tipo de examen</h4>
+                <p>
+                    <label>
+                        <input name="tipoExamen" type="radio" value="normal" checked />
+                        <span>Examen Normal</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input name="tipoExamen" type="radio" value="personalizado" />
+                        <span>Examen Personalizado</span>
+                    </label>
+                </p>
+                <div id="personalizadoOptions" style="display: none;">
+                    <div class="input-field col s12">
+                        <input id="numLeyes" type="number" min="0" value="0">
+                        <label for="numLeyes">Número de Preguntas Bloque I</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="numPsicotecnico" type="number" min="0" value="0">
+                        <label for="numPsicotecnico">Número de Preguntas Psicotécnico</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="numBloqueII" type="number" min="0" value="0">
+                        <label for="numBloqueII">Número de Preguntas Bloque II</label>
+                    </div>
+                </div>
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light" type="submit">Generar Preguntas</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Área donde se mostrarán las preguntas -->
+        <div id="preguntasContainer"></div>
+
+        <!-- Botón para corregir -->
+        <div class="row">
+            <div class="col s12 center-align">
+                <button id="corregirBtn" class="btn waves-effect waves-light" style="display:none;">Corregir</button>
+                <button id="reiniciarBtn" class="btn waves-effect waves-light" style="display:none;">Reiniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón flotante -->
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red">
+            <i class="material-icons">add</i>
+        </a>
+        <ul>
+            <li><a class="btn-floating deep-orange lighten-2 modal-trigger" href="#infoModal"><i
+                        class="material-icons">info_outline</i></a></li>
+            <li><a class="btn-floating  deep-orange lighten-1 modal-trigger" href="#statsModal"><i
+                        class="material-icons">insert_chart</i></a></li>
+            <li><a class="btn-floating deep-orange darken-3 modal-trigger" href="#pdfModal"><i
+                        class="material-icons">folder</i></a></li>
+        </ul>
+    </div>
+
+    <!-- Modal para Información -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <h4>Información</h4>
+            <p id="infoText">La información aquí recogida viene del <a target="_blank"
+                    href="https://www.inap.es/en/cuerpo-general-auxiliar-de-la-administracion-del-estado">Instituto
+                    Nacional de Administración Pública, Cuerpo General Auxiliar de la Administración del Estado.</a>
+                <br>
+                Pueden encontrarse fallos tanto de ortografía como de algunas respuestas, se puede consultar todos los
+                exámenes junto con las respuestas en el enlace anterior, de cada convocatoria.
+
+                <br><br>
+            <h6>
+
+                En las preguntas de excel puede haber algun fallo ya que en algunas preguntas lo detectaba como una
+                formula, he intentado quitar todo y dejarlo bien pero si no os cuadra algo, preguntarme.
+                <br><br>
+                <b>Examen Normal:</b> 30 Preguntas del Bloque 1; 30 Preguntas Psicotécnicas; 50 Preguntas del Bloque
+                II <br>
+                <b>
+                    Examen Personalizado:
+                </b>
+                te permite elegir el número de preguntas por cada categoría: Bloque I;
+                Psicotécnico; Bloque II
+                <br><br>
+                La duración del exámen es de <i>90 minutos</i>, esta web <b>NO</b> controla el tiempo <br>
+                Respuesta correcta: +1 punto | Respuesta incorrecta: -1/3 punto.
+                <br>
+                <br>
+                Las Estadísticas de la web se almacenan en tu móvil y no salen de ahí, debes abrir siempre con el mismo
+                navegador.
+            </h6>
+            <br>
+            <h5>
+                ¡Suerte!
+            </h5>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+        </div>
+    </div>
+
+    <!-- Modal para Estadísticas -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content">
+            <h4>Estadísticas</h4>
+            <div id="statsContent">
+                <table class="highlight">
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Respondidas</th>
+                            <th>Correctas</th>
+                            <th>Fallidas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statsTableBody">
+                        <!-- Los datos se llenarán dinámicamente -->
+                    </tbody>
+                </table>
+                <br>
+                <div>Total Preguntas Respondidas: <span id="totalRespondidas">0</span></div>
+                <div>Total Intentos: <span id="totalIntentos">0</span></div>
+                <div>Preguntas Correctas: <span id="totalCorrectas">0</span></div>
+                <div>Preguntas Incorrectas: <span id="totalIncorrectas">0</span></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="resetStatsBtn">Reiniciar
+                Estadísticas</a>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+        </div>
+    </div>
+
+    <!-- Modal para PDF -->
+    <div id="pdfModal" class="modal">
+        <div class="modal-content">
+            <h4>Exámenes</h4>
+            <div id="pdfContent">
+                <div class="container">
+                    <div class="row">
+                        <div class="col l6">
+                            <b>Exámen</b>
+                        </div>
+                        <div class="col l6">
+                            <b>Respuestas</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1769083/Examen%2520AUL-LIBRE%2520OEP%25202015.pdf/7f4dd631-512d-aee8-79f0-d5f39e1529c8">Exámen 2015</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1769083/Plant_def_AUX_L%2520_%25201_ej.pdf/dea70b2b-4f27-d3b8-8736-32b1a6df6648">Respuestas Exámen 2015</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1785995/AUX-LI%252016.pdf/a781822a-90c1-802f-737f-4b0a0aa56e42">Exámen 2016</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1785995/Plant_def_AUX-L_VITORIA_1_EJE_154AB89SD658.pdf/c785306e-80fd-c106-c55a-16e5a821350a">Respuestas Exámen 2016</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1779574/AUX%2520LI%2520MODELO%2520A%25202017.pdf/1139a95c-dbb9-3a76-4c19-09ec745558bd">Exámen 2017A</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1779574/Plantilla_definitiva%2520AUX-L%2520%25c2%25b7%2520MODELO%2520A%25202017.pdf/a06d8bf4-d2da-b599-9790-59d89138a137">Respuestas Exámen 2017A</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1779574/AUX%2520LI%2520MODELO%2520B%25202017.pdf/d2939fe8-7b7e-f0ca-3ddd-a9ed6ad000e4">Exámen 2017B</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1779574/Plantilla_definitiva%2520AUX-L%2520%25c2%25b7%2520MODELO%2520B%25202017.pdf/a3542c8d-f190-1eb7-4806-093aeac1eaf7">Respuestas Exámen 2017B</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1769980/09AUXLA_154AB89SD658.pdf/a025c8ec-413f-8739-7e94-ceb233207682">Exámen 2018A</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1769980/Plantilla_defAUX-LA1ejer_154AB89SD658.pdf/27cdd077-92e7-10bd-54c1-96066084b581">Respuestas Exámen 2018A</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1769980/09AUXLB_154AB89SD658.pdf/2746a6bd-2651-9e67-5c8d-15f707a3f992">Exámen 2018B</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1769980/Plantilla_defAUX-LB1ejer_154AB89SD658.pdf/120fe798-62f3-a37d-2bdf-be7643374ec3">Respuestas Exámen 2018B</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1925500/ExamenAUX-LEjercicionico2019conportada_JZPWYM3XIF_154AB89SD658.pdf/87e934b2-a4f4-7e48-5c27-b3bb9c8bf0d7">Exámen 2019/2020</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/1925500/Plantilla_definitivaAUX-LEjercicionico2019_G58CVN26VR_154AB89SD658.pdf/e877485a-6d2f-855f-6507-fadca1581ea7">Respuestas Exámen 2019/2020</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/2194765/Cuestionario+AUX-L_vfinal.pdf/4b9d3734-4285-e12a-88e4-047e952e4840">Exámen 2021/2022</a>
+                        </div>
+                        <div class="col l6">
+                            <a target="_blank" href="https://sede.inap.gob.es/documents/59312/2194765/Plantilla+respuestas+definitiva+AUX-L.pdf/a7d40273-8c3f-6ac0-dd43-a7a6a076daf1">Respuestas Exámen 2021/2022</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+        </div>
+    </div>
+
+    <!-- Importar Materialize JS y jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script src="data.js"></script> <!-- Enlazar el archivo JSON -->
+    <script src="script.js"></script> <!-- Enlazar el script principal -->
+</body>
+
+</html>

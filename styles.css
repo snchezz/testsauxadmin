@@ -1,0 +1,28 @@
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.correcta {
+    background-color: #c8e6c9; /* Verde claro */
+}
+
+.incorrecta {
+    background-color: #ffcdd2; /* Rojo claro */
+}
+
+.no-respondida {
+    background-color: #FFE5A0; /* Amarillo claro */
+}
+
+.floating-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.modal-content {
+    max-height: 60vh;
+    overflow-y: auto;
+}
