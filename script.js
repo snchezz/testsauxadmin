@@ -100,7 +100,7 @@ $(document).ready(function () {
     function mostrarPreguntas(preguntasSeleccionadas) {
         preguntasSeleccionadas.forEach((pregunta, index) => {
             const imagenHtml = pregunta.Imagen !== "N/A" ?
-                `<img src="IMG/${pregunta.Imagen}.png" alt="${pregunta.Imagen}" style="max-width:100%; margin-top: 15px;">` :
+                `<img class="materialboxed" src="IMG/${pregunta.Imagen}.png" alt="${pregunta.Imagen}" style="max-width:100%; margin-top: 15px;">` :
                 "";
 
             const preguntaHtml = `
@@ -142,14 +142,15 @@ $(document).ready(function () {
             preguntasContainer.append(preguntaHtml);
         });
 
+        // Inicializar las imágenes después de agregarlas al DOM
+        $('.materialboxed').materialbox();
+
         // Manejar el clic en el enlace "Desmarcar esta pregunta"
         $(document).on('click', '.desmarcar-enlace', function (e) {
             e.preventDefault();
             const index = $(this).data('index');
             $(`input[name="pregunta${index}"]`).prop('checked', false);
         });
-
-
 
         corregirBtn.off('click').on('click', function () {
             corregirRespuestas(preguntasSeleccionadas);
